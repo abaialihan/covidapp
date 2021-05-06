@@ -2,14 +2,15 @@
 
 package com.example.covid_19app.fragments
 
-import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import com.example.covid_19app.R
 
@@ -28,6 +29,8 @@ class StaticFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var spinnerCountry: Spinner
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -41,19 +44,24 @@ class StaticFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_static, container, false)
+        return inflater.inflate(R.layout.fragment_static, container, false)
+        itemSelect()
+    }
 
-        val spinnerCountry = view.findViewById<View>(R.id.spinner_country) as? Spinner
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        spinnerCountry = view.findViewById(R.id.spinner_country)
+    }
 
-        return view
 
-        spinnerCountry?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    private fun itemSelect(){
+        spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(requireContext(), "You selected ${parent?.getItemAtPosition(position).toString()}", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "You selected ${parent?.getItemAtPosition(position).toString()}", Toast.LENGTH_LONG).show()
             }
         }
     }

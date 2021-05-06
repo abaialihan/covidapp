@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/ic_stat"
-        android:icon="@drawable/ic_stat"
+        android:icon="@drawable/stat_selector"
         android:title="STATIC"
         />
 
     <item
         android:id="@+id/ic_news"
-        android:icon="@drawable/ic_news"
+        android:icon="@drawable/news_selector"
         android:title="NEWS"
         />
 
     <item
         android:id="@+id/ic_map"
-        android:icon="@drawable/ic_map"
+        android:icon="@drawable/map_selector"
         android:title="MAP"
         />
 
     <item
         android:id="@+id/ic_info"
-        android:icon="@drawable/ic_info"
+        android:icon="@drawable/info_selector"
         android:title="ABOUT"
         />
 

@@ -2,6 +2,7 @@ package com.example.covid_19app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -16,17 +17,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
 
         val statsFragment = StaticFragment()
         val newsFragment = NewsFragment()
         val mapFragment = MapFragment()
         val aboutFragment = AboutFragment()
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
+        bottomNavigation.itemIconTintList = null
 
         makeCurrentFragment(statsFragment)
 
         bottomNavigation.setOnNavigationItemSelectedListener {
+
             when (it.itemId){
                 R.id.ic_stat -> makeCurrentFragment(statsFragment)
                 R.id.ic_news -> makeCurrentFragment(newsFragment)
@@ -35,9 +38,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-
-
     }
 
     private fun makeCurrentFragment(fragment: Fragment) =

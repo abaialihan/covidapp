@@ -2,10 +2,10 @@
     <string name="app_name">Covid-19 App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">statics</string>
-    <string-array name="Countries">
-        <item>Kyrgyzstan</item>
-        <item>Russia</item>
+    <string-array name="countries">
+        <item>KGZ</item>
+        <item>RUS</item>
         <item>USA</item>
-        <item>Canada</item>
+        <item>CND</item>
     </string-array>
 </resources>
