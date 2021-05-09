@@ -29,9 +29,9 @@ class StaticFragment : Fragment() {
     private lateinit var flagImageView: ImageView
 
     //лист из названий стран которые мы выбраем в  спиннере
-    val listOfCountry: Array<String> = arrayOf("KGZ", "USA", "RUS", "CND")
-    // id иконок стран собраем  массив чтобы связать с позициями списка стран
-    val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd)
+    private val listOfCountry: Array<String> = arrayOf("KGZ", "USA", "RUS", "CND")
+    // id иконок стран собраем  массив что бы связать с позициями списка стран
+    private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
