@@ -3,12 +3,18 @@
 package com.example.covid_19app.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.covid_19app.R
+import com.example.covid_19app.data.internet.HttpBuilder
+import com.example.covid_19app.model.CovidStatResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,11 +33,16 @@ class StaticFragment : Fragment() {
 
     private lateinit var spinnerCountry: Spinner
     private lateinit var flagImageView: ImageView
+    private lateinit var totalConfirmedTextView: TextView
+    private lateinit var newConfirmedTextView: TextView
+    private lateinit var totalDeathTextView: TextView
+    private lateinit var newDeathTextView: TextView
+    private lateinit var recoveredTextView: TextView
 
     //лист из названий стран которые мы выбраем в  спиннере
-    private val listOfCountry: Array<String> = arrayOf("KGZ", "USA", "RUS", "CND")
+    private val listOfCountry: Array<String> = arrayOf("Kyrgyzstan", "USA", "Russia", "Canada", "GLOBAL")
     // id иконок стран собраем  массив что бы связать с позициями списка стран
-    private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd)
+    private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd, R.drawable.global)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +60,11 @@ class StaticFragment : Fragment() {
         val rootView: View = inflater.inflate(R.layout.fragment_static, container, false)
         spinnerCountry = rootView.findViewById(R.id.spinner_country)
         flagImageView = rootView.findViewById(R.id.flagImageView)
+        totalConfirmedTextView = rootView.findViewById(R.id.totalConfirmedTextView)
+        newConfirmedTextView = rootView.findViewById(R.id.newConfirmedTextView)
+        totalDeathTextView = rootView.findViewById(R.id.totalDeathTextView1)
+        newDeathTextView = rootView.findViewById(R.id.newDeathTextView1)
+        recoveredTextView = rootView.findViewById(R.id.totalRecoveredTextView)
         itemSelect()
         return rootView
     }
@@ -68,11 +84,129 @@ class StaticFragment : Fragment() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(activity, "You selected ${parent?.getItemAtPosition(position).toString()}", Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "You selected ${parent?.getItemAtPosition(position).toString()}", Toast.LENGTH_LONG).show()
                 //меняем картину в flagImageView по выбору item в спинере
                 flagImageView.setImageResource(flagPosition[spinnerCountry.selectedItemPosition])
+                getResponse()
+
             }
         }
+    }
+
+    private fun getResponse(){
+        when(spinnerCountry.selectedItemId){
+            R.drawable.global -> getGlobalStat()
+            R.drawable.ic_cnd -> getCanadaStat()
+            R.drawable.ic_kgz -> getKyrgyzstanStat()
+            R.drawable.ic_usa -> getUsaStat()
+            R.drawable.ic_rus -> getRussiaStat()
+        }
+        true
+    }
+
+    private fun getKyrgyzstanStat(){
+        HttpBuilder.getService().getKyrgyzstanStat().enqueue(object : Callback<CovidStatResponse>{
+            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+                if (response.isSuccessful && response.body() != null){
+                    val data = response.body()
+
+                    totalConfirmedTextView.text = data?.cases.toString()
+                    newConfirmedTextView.text = data?.todayCases.toString()
+                    totalDeathTextView.text = data?.deaths.toString()
+                    newDeathTextView.text = data?.todayDeaths.toString()
+                    recoveredTextView.text = data?.recovered.toString()
+
+                }
+            }
+
+            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+                Log.i("TAG", "onFailure")
+            }
+        })
+    }
+
+    private fun getRussiaStat(){
+        HttpBuilder.getService().getRussiaStat().enqueue(object : Callback<CovidStatResponse>{
+            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+                if (response.isSuccessful && response.body() != null){
+                    val data = response.body()
+
+                    totalConfirmedTextView.text = data?.cases.toString()
+                    newConfirmedTextView.text = data?.todayCases.toString()
+                    totalDeathTextView.text = data?.deaths.toString()
+                    newDeathTextView.text = data?.todayDeaths.toString()
+                    recoveredTextView.text = data?.recovered.toString()
+
+                }
+            }
+
+            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+                Log.i("TAG", "onFailure")
+            }
+        })
+    }
+
+    private fun getUsaStat(){
+        HttpBuilder.getService().getUsaStat().enqueue(object : Callback<CovidStatResponse>{
+            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+                if (response.isSuccessful && response.body() != null){
+                    val data = response.body()
+
+                    totalConfirmedTextView.text = data?.cases.toString()
+                    newConfirmedTextView.text = data?.todayCases.toString()
+                    totalDeathTextView.text = data?.deaths.toString()
+                    newDeathTextView.text = data?.todayDeaths.toString()
+                    recoveredTextView.text = data?.recovered.toString()
+
+                }
+            }
+
+            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+                Log.i("TAG", "onFailure")
+            }
+        })
+    }
+
+    private fun getCanadaStat(){
+        HttpBuilder.getService().getCanadaStat().enqueue(object : Callback<CovidStatResponse>{
+            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+                if (response.isSuccessful && response.body() != null){
+                    val data = response.body()
+
+                    totalConfirmedTextView.text = data?.cases.toString()
+                    newConfirmedTextView.text = data?.todayCases.toString()
+                    totalDeathTextView.text = data?.deaths.toString()
+                    newDeathTextView.text = data?.todayDeaths.toString()
+                    recoveredTextView.text = data?.recovered.toString()
+
+                }
+            }
+
+            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+                Log.i("TAG", "onFailure")
+            }
+        })
+    }
+
+    private fun getGlobalStat(){
+        HttpBuilder.getService().getGlobalStat().enqueue(object : Callback<CovidStatResponse>{
+            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+                if (response.isSuccessful && response.body() != null){
+                    val data = response.body()
+
+                    totalConfirmedTextView.text = data?.cases.toString()
+                    newConfirmedTextView.text = data?.todayCases.toString()
+                    totalDeathTextView.text = data?.deaths.toString()
+                    newDeathTextView.text = data?.todayDeaths.toString()
+                    recoveredTextView.text = data?.recovered.toString()
+
+                }
+            }
+
+            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+                Log.i("TAG", "onFailure")
+            }
+        })
     }
 
     companion object {
