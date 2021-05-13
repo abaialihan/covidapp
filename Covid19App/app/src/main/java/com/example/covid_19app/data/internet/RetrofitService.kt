@@ -1,26 +1,25 @@
 package com.example.covid_19app.data.internet
 
-import com.example.covid_19app.model.AllStatResponse
-import com.example.covid_19app.model.CovidStatResponse
+import com.example.covid_19app.data.dataPOJO.AllStatResponse
+import com.example.covid_19app.data.dataPOJO.CovidStatResponse
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.Path
 
 interface RetrofitService {
-    @GET("countries")
-    fun getGlobalStat(): Call<CovidStatResponse>
+    @GET("countries/all")
+    fun getGlobalStat(): Call<AllStatResponse>
 
     @GET("countries/kyrgyzstan")
     fun getKyrgyzstanStat(): Call<CovidStatResponse>
 
-    @GET("countries/kyrgyzstan")
+    @GET("countries/russia")
     fun getRussiaStat(): Call<CovidStatResponse>
 
-    @GET("countries/kyrgyzstan")
+    @GET("countries/canada")
     fun getCanadaStat(): Call<CovidStatResponse>
 
-    @GET("countries/kyrgyzstan")
+    @GET("countries/usa")
     fun getUsaStat(): Call<CovidStatResponse>
 
 

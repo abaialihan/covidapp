@@ -10,8 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.covid_19app.R
+import com.example.covid_19app.data.dataPOJO.AllStatResponse
 import com.example.covid_19app.data.internet.HttpBuilder
-import com.example.covid_19app.model.CovidStatResponse
+import com.example.covid_19app.data.dataPOJO.CovidStatResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +41,7 @@ class StaticFragment : Fragment() {
     private lateinit var recoveredTextView: TextView
 
     //лист из названий стран которые мы выбраем в  спиннере
-    private val listOfCountry: Array<String> = arrayOf("Kyrgyzstan", "USA", "Russia", "Canada", "GLOBAL")
+    private val listOfCountry: Array<String> = arrayOf("KGZ", "USA", "RUS", "CND", "GLOBAL")
     // id иконок стран собраем  массив что бы связать с позициями списка стран
     private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd, R.drawable.global)
 
@@ -88,13 +89,12 @@ class StaticFragment : Fragment() {
                 //меняем картину в flagImageView по выбору item в спинере
                 flagImageView.setImageResource(flagPosition[spinnerCountry.selectedItemPosition])
                 getResponse()
-
             }
         }
     }
 
     private fun getResponse(){
-        when(spinnerCountry.selectedItemId){
+        when(flagPosition[spinnerCountry.selectedItemPosition]){
             R.drawable.global -> getGlobalStat()
             R.drawable.ic_cnd -> getCanadaStat()
             R.drawable.ic_kgz -> getKyrgyzstanStat()
@@ -189,21 +189,19 @@ class StaticFragment : Fragment() {
     }
 
     private fun getGlobalStat(){
-        HttpBuilder.getService().getGlobalStat().enqueue(object : Callback<CovidStatResponse>{
-            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+        HttpBuilder.getService().getGlobalStat().enqueue(object : Callback<AllStatResponse>{
+            override fun onResponse(call: Call<AllStatResponse>, response: Response<AllStatResponse>) {
                 if (response.isSuccessful && response.body() != null){
                     val data = response.body()
 
                     totalConfirmedTextView.text = data?.cases.toString()
-                    newConfirmedTextView.text = data?.todayCases.toString()
                     totalDeathTextView.text = data?.deaths.toString()
-                    newDeathTextView.text = data?.todayDeaths.toString()
                     recoveredTextView.text = data?.recovered.toString()
 
                 }
             }
 
-            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+            override fun onFailure(call: Call<AllStatResponse>, t: Throwable) {
                 Log.i("TAG", "onFailure")
             }
         })

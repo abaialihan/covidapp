@@ -1,4 +1,4 @@
-package com.example.covid_19app.model
+package com.example.covid_19app.data.dataPOJO
 
 data class CovidStatResponse(
 	val country: String? = null,

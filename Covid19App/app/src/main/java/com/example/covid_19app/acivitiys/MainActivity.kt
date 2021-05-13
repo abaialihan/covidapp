@@ -1,12 +1,9 @@
-package com.example.covid_19app
+package com.example.covid_19app.acivitiys
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import com.example.covid_19app.R
 import com.example.covid_19app.fragments.AboutFragment
 import com.example.covid_19app.fragments.MapFragment
 import com.example.covid_19app.fragments.NewsFragment
