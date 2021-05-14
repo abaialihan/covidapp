@@ -1,4 +1,4 @@
-package com.example.covid_19app.acivitiys
+package com.example.covid_19app.acivitiyes
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
