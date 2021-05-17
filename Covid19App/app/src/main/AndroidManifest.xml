@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Covid19App">
+        android:theme="@style/splashScreenTheme">
         <activity android:name=".acivitiyes.MainActivity"
             >
             <intent-filter>

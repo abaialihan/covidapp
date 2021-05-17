@@ -1,7 +1,12 @@
 package com.example.covid_19app.data.dataPOJO
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 data class CovidResponse(
-	val dataResponse: Data,
+	@SerializedName("data")
+	@Expose
+	val data: Data,
 	val type: String,
 	val status: Int
 )
@@ -13,23 +18,23 @@ data class Data(
 
 data class Change(
 	val recovered: Int,
-	val totalCases: Int,
+	val total_cases: Int,
 	val critical: Int,
-	val recoveryRatio: Double,
+	val recovery_ratio: Double,
 	val tested: Int,
-	val activeCases: Int,
+	val active_cases: Int,
 	val deaths: Int,
-	val deathRatio: Double
+	val death_ratio: Double
 )
 
 data class Summary(
 	val recovered: Int,
-	val totalCases: Int,
+	val total_cases: Int,
 	val critical: Int,
-	val recoveryRatio: Double,
+	val recovery_ratio: Double,
 	val tested: Int,
-	val activeCases: Int,
+	val active_cases: Int,
 	val deaths: Int,
-	val deathRatio: Double
+	val death_ratio: Double
 )
 
