@@ -2,7 +2,6 @@
 
 package com.example.covid_19app.fragments
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -34,10 +33,11 @@ class StaticFragment : Fragment() {
     private lateinit var newConfirmedTextView: TextView
     private lateinit var totalDeathTextView: TextView
     private lateinit var newDeathTextView: TextView
-    private lateinit var recoveredTextView: TextView
+    private lateinit var totalRecoveredTextView: TextView
+    private lateinit var newRecoveredTextView: TextView
 
     //лист из названий стран которые мы выбраем в  спиннере
-    private val listOfCountry: Array<String> = arrayOf("kyrgyzstan", "usa", "russia", "canada", "global")
+    private val listOfCountry: Array<String> = arrayOf("Kyrgyzstan", "USA", "Russia", "Canada", "Global")
     // id иконок стран собраем  массив что бы связать с позициями списка стран
     private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd, R.drawable.global)
 
@@ -62,7 +62,9 @@ class StaticFragment : Fragment() {
         newConfirmedTextView = rootView.findViewById(R.id.newConfirmedTextView)
         totalDeathTextView = rootView.findViewById(R.id.totalDeathTextView1)
         newDeathTextView = rootView.findViewById(R.id.newDeathTextView1)
-        recoveredTextView = rootView.findViewById(R.id.totalRecoveredTextView)
+        totalRecoveredTextView = rootView.findViewById(R.id.totalRecoveredTextView)
+        newRecoveredTextView = rootView.findViewById(R.id.newRecoveredTextView)
+
         itemSelect()
         return rootView
     }
@@ -101,7 +103,8 @@ class StaticFragment : Fragment() {
                             newConfirmedTextView.text = dataResponseBody?.data?.change?.total_cases.toString()
                             totalDeathTextView.text = dataResponseBody?.data?.summary?.deaths.toString()
                             newDeathTextView.text = dataResponseBody?.data?.change?.deaths.toString()
-                            recoveredTextView.text = dataResponseBody?.data?.summary?.recovered.toString()
+                            totalRecoveredTextView.text = dataResponseBody?.data?.summary?.recovered.toString()
+                            newRecoveredTextView.text = dataResponseBody?.data?.change?.recovered.toString()
 
                         }
                     }
