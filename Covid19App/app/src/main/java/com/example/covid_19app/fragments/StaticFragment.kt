@@ -10,9 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.covid_19app.R
-import com.example.covid_19app.data.dataPOJO.AllStatResponse
+import com.example.covid_19app.data.dataPOJO.CovidResponse
 import com.example.covid_19app.data.internet.HttpBuilder
-import com.example.covid_19app.data.dataPOJO.CovidStatResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +40,7 @@ class StaticFragment : Fragment() {
     private lateinit var recoveredTextView: TextView
 
     //лист из названий стран которые мы выбраем в  спиннере
-    private val listOfCountry: Array<String> = arrayOf("KGZ", "USA", "RUS", "CND", "GLOBAL")
+    private val listOfCountry: Array<String> = arrayOf("kyrgyzstan", "usa", "russia", "canada", "global")
     // id иконок стран собраем  массив что бы связать с позициями списка стран
     private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd, R.drawable.global)
 
@@ -85,127 +84,150 @@ class StaticFragment : Fragment() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                //Toast.makeText(activity, "You selected ${parent?.getItemAtPosition(position).toString()}", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "You selected ${parent?.getItemAtPosition(position).toString()}", Toast.LENGTH_LONG).show()
                 //меняем картину в flagImageView по выбору item в спинере
                 flagImageView.setImageResource(flagPosition[spinnerCountry.selectedItemPosition])
-                getResponse()
+                //getResponse()
+
+                val countryName: String = parent?.getItemAtPosition(position).toString()
+
+                HttpBuilder.getService().getStatByCountry(countryName).enqueue(object : Callback<CovidResponse>{
+                    override fun onResponse(call: Call<CovidResponse>, response: Response<CovidResponse>) {
+                        if (response.isSuccessful && response.body() != null){
+                            Log.i("TAG", "onSuccessful")
+                            val data = response.body()
+
+                            totalConfirmedTextView.text = data?.dataResponse?.summary?.totalCases.toString()
+                            newConfirmedTextView.text = data?.dataResponse?.change?.totalCases.toString()
+                            totalDeathTextView.text = data?.dataResponse?.summary?.deaths.toString()
+                            newDeathTextView.text = data?.dataResponse?.change?.deaths.toString()
+                            recoveredTextView.text = data?.dataResponse?.change?.recovered.toString()
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
+                        Log.i("TAG", "onFailure")
+                    }
+                })
+
             }
         }
     }
 
-    private fun getResponse(){
-        when(flagPosition[spinnerCountry.selectedItemPosition]){
-            R.drawable.global -> getGlobalStat()
-            R.drawable.ic_cnd -> getCanadaStat()
-            R.drawable.ic_kgz -> getKyrgyzstanStat()
-            R.drawable.ic_usa -> getUsaStat()
-            R.drawable.ic_rus -> getRussiaStat()
-        }
-        true
-    }
+//    private fun getResponse(){
+//        when(flagPosition[spinnerCountry.selectedItemPosition]){
+//            R.drawable.global -> getGlobalStat()
+//            R.drawable.ic_cnd -> getCanadaStat()
+//            R.drawable.ic_kgz -> getKyrgyzstanStat()
+//            R.drawable.ic_usa -> getUsaStat()
+//            R.drawable.ic_rus -> getRussiaStat()
+//        }
+//        true
+//    }
 
-    private fun getKyrgyzstanStat(){
-        HttpBuilder.getService().getKyrgyzstanStat().enqueue(object : Callback<CovidStatResponse>{
-            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
-                if (response.isSuccessful && response.body() != null){
-                    val data = response.body()
+//    private fun getKyrgyzstanStat(){
+//        HttpBuilder.getService().getStatByCountry().enqueue(object : Callback<CovidResponse>{
+//            override fun onResponse(call: Call<CovidResponse>, response: Response<CovidResponse>) {
+//                if (response.isSuccessful && response.body() != null){
+//                    val data = response.body()
+//
+//                    totalConfirmedTextView.text = data?.cases.toString()
+//                    newConfirmedTextView.text = data?.todayCases.toString()
+//                    totalDeathTextView.text = data?.deaths.toString()
+//                    newDeathTextView.text = data?.todayDeaths.toString()
+//                    recoveredTextView.text = data?.recovered.toString()
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
+//                Log.i("TAG", "onFailure")
+//            }
+//        })
+//    }
 
-                    totalConfirmedTextView.text = data?.cases.toString()
-                    newConfirmedTextView.text = data?.todayCases.toString()
-                    totalDeathTextView.text = data?.deaths.toString()
-                    newDeathTextView.text = data?.todayDeaths.toString()
-                    recoveredTextView.text = data?.recovered.toString()
+//    private fun getRussiaStat(){
+//        HttpBuilder.getService().getRussiaStat().enqueue(object : Callback<CovidStatResponse>{
+//            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+//                if (response.isSuccessful && response.body() != null){
+//                    val data = response.body()
+//
+//                    totalConfirmedTextView.text = data?.cases.toString()
+//                    newConfirmedTextView.text = data?.todayCases.toString()
+//                    totalDeathTextView.text = data?.deaths.toString()
+//                    newDeathTextView.text = data?.todayDeaths.toString()
+//                    recoveredTextView.text = data?.recovered.toString()
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+//                Log.i("TAG", "onFailure")
+//            }
+//        })
+//    }
 
-                }
-            }
+//    private fun getUsaStat(){
+//        HttpBuilder.getService().getUsaStat().enqueue(object : Callback<CovidStatResponse>{
+//            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+//                if (response.isSuccessful && response.body() != null){
+//                    val data = response.body()
+//
+//                    totalConfirmedTextView.text = data?.cases.toString()
+//                    newConfirmedTextView.text = data?.todayCases.toString()
+//                    totalDeathTextView.text = data?.deaths.toString()
+//                    newDeathTextView.text = data?.todayDeaths.toString()
+//                    recoveredTextView.text = data?.recovered.toString()
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+//                Log.i("TAG", "onFailure")
+//            }
+//        })
+//    }
 
-            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
-                Log.i("TAG", "onFailure")
-            }
-        })
-    }
+//    private fun getCanadaStat(){
+//        HttpBuilder.getService().getCanadaStat().enqueue(object : Callback<CovidStatResponse>{
+//            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
+//                if (response.isSuccessful && response.body() != null){
+//                    val data = response.body()
+//
+//                    totalConfirmedTextView.text = data?.cases.toString()
+//                    newConfirmedTextView.text = data?.todayCases.toString()
+//                    totalDeathTextView.text = data?.deaths.toString()
+//                    newDeathTextView.text = data?.todayDeaths.toString()
+//                    recoveredTextView.text = data?.recovered.toString()
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
+//                Log.i("TAG", "onFailure")
+//            }
+//        })
+//    }
 
-    private fun getRussiaStat(){
-        HttpBuilder.getService().getRussiaStat().enqueue(object : Callback<CovidStatResponse>{
-            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
-                if (response.isSuccessful && response.body() != null){
-                    val data = response.body()
-
-                    totalConfirmedTextView.text = data?.cases.toString()
-                    newConfirmedTextView.text = data?.todayCases.toString()
-                    totalDeathTextView.text = data?.deaths.toString()
-                    newDeathTextView.text = data?.todayDeaths.toString()
-                    recoveredTextView.text = data?.recovered.toString()
-
-                }
-            }
-
-            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
-                Log.i("TAG", "onFailure")
-            }
-        })
-    }
-
-    private fun getUsaStat(){
-        HttpBuilder.getService().getUsaStat().enqueue(object : Callback<CovidStatResponse>{
-            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
-                if (response.isSuccessful && response.body() != null){
-                    val data = response.body()
-
-                    totalConfirmedTextView.text = data?.cases.toString()
-                    newConfirmedTextView.text = data?.todayCases.toString()
-                    totalDeathTextView.text = data?.deaths.toString()
-                    newDeathTextView.text = data?.todayDeaths.toString()
-                    recoveredTextView.text = data?.recovered.toString()
-
-                }
-            }
-
-            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
-                Log.i("TAG", "onFailure")
-            }
-        })
-    }
-
-    private fun getCanadaStat(){
-        HttpBuilder.getService().getCanadaStat().enqueue(object : Callback<CovidStatResponse>{
-            override fun onResponse(call: Call<CovidStatResponse>, response: Response<CovidStatResponse>) {
-                if (response.isSuccessful && response.body() != null){
-                    val data = response.body()
-
-                    totalConfirmedTextView.text = data?.cases.toString()
-                    newConfirmedTextView.text = data?.todayCases.toString()
-                    totalDeathTextView.text = data?.deaths.toString()
-                    newDeathTextView.text = data?.todayDeaths.toString()
-                    recoveredTextView.text = data?.recovered.toString()
-
-                }
-            }
-
-            override fun onFailure(call: Call<CovidStatResponse>, t: Throwable) {
-                Log.i("TAG", "onFailure")
-            }
-        })
-    }
-
-    private fun getGlobalStat(){
-        HttpBuilder.getService().getGlobalStat().enqueue(object : Callback<AllStatResponse>{
-            override fun onResponse(call: Call<AllStatResponse>, response: Response<AllStatResponse>) {
-                if (response.isSuccessful && response.body() != null){
-                    val data = response.body()
-
-                    totalConfirmedTextView.text = data?.cases.toString()
-                    totalDeathTextView.text = data?.deaths.toString()
-                    recoveredTextView.text = data?.recovered.toString()
-
-                }
-            }
-
-            override fun onFailure(call: Call<AllStatResponse>, t: Throwable) {
-                Log.i("TAG", "onFailure")
-            }
-        })
-    }
+//    private fun getGlobalStat(){
+//        HttpBuilder.getService().getGlobalStat().enqueue(object : Callback<AllStatResponse>{
+//            override fun onResponse(call: Call<AllStatResponse>, response: Response<AllStatResponse>) {
+//                if (response.isSuccessful && response.body() != null){
+//                    val data = response.body()
+//
+//                    totalConfirmedTextView.text = data?.cases.toString()
+//                    totalDeathTextView.text = data?.deaths.toString()
+//                    recoveredTextView.text = data?.recovered.toString()
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<AllStatResponse>, t: Throwable) {
+//                Log.i("TAG", "onFailure")
+//            }
+//        })
+//    }
 
     companion object {
         /**

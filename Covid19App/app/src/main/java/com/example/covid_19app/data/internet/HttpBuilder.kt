@@ -6,7 +6,8 @@ import retrofit2.create
 
 object HttpBuilder {
 
-    const val BASE_URL = "https://coronavirus-19-api.herokuapp.com/"
+    private const val BASE_URL = "https://coronavirus-map.p.rapidapi.com/v1/"
+    private const val BASE_URL1 = "https://coronavirus-19-api.herokuapp.com/"
 
     private var service: RetrofitService? = null
 
