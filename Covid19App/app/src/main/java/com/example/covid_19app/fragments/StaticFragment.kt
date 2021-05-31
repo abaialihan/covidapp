@@ -38,6 +38,7 @@ class StaticFragment : Fragment() {
 
     //лист из названий стран которые мы выбраем в  спиннере
     private val listOfCountry: Array<String> = arrayOf("Kyrgyzstan", "USA", "Russia", "Canada", "Global")
+
     // id иконок стран собраем  массив что бы связать с позициями списка стран
     private val flagPosition: Array<Int> = arrayOf(R.drawable.ic_kgz, R.drawable.ic_usa, R.drawable.ic_rus, R.drawable.ic_cnd, R.drawable.global)
 
@@ -71,9 +72,11 @@ class StaticFragment : Fragment() {
 
     // здесь обрабатываем выбранный item из спиннера
     private fun itemSelect(){
+
         //создвем адаптер для спинера
         val adapter = activity?.let { ArrayAdapter(it, android.R.layout.simple_spinner_dropdown_item, listOfCountry) }
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         // ставим созданный адаптер к спиннеру
         spinnerCountry!!.adapter = adapter
 
@@ -92,30 +95,36 @@ class StaticFragment : Fragment() {
 
                 progressBar.visibility = View.VISIBLE
 
-                HttpBuilder.getService().getStatByCountry(countryName).enqueue(object : Callback<CovidResponse>{
-                    override fun onResponse(call: Call<CovidResponse>, response: Response<CovidResponse>) {
-                        if (response.isSuccessful && response.body() != null){
-                            Log.i("TAG", "onSuccessful")
-                            val dataResponseBody = response.body()
-                            progressBar.visibility = View.INVISIBLE
-
-                            totalConfirmedTextView.text = dataResponseBody?.data?.summary?.total_cases.toString()
-                            newConfirmedTextView.text = dataResponseBody?.data?.change?.total_cases.toString()
-                            totalDeathTextView.text = dataResponseBody?.data?.summary?.deaths.toString()
-                            newDeathTextView.text = dataResponseBody?.data?.change?.deaths.toString()
-                            totalRecoveredTextView.text = dataResponseBody?.data?.summary?.recovered.toString()
-                            newRecoveredTextView.text = dataResponseBody?.data?.change?.recovered.toString()
-
-                        }
-                    }
-
-                    override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
-                        Log.i("TAG", "onFailure")
-                    }
-                })
+                getResponse(countryName)
 
             }
         }
+    }
+
+    fun getResponse(countryNameSelect: String){
+
+        HttpBuilder.getService().getStatByCountry(countryNameSelect).enqueue(object : Callback<CovidResponse>{
+            override fun onResponse(call: Call<CovidResponse>, response: Response<CovidResponse>) {
+                if (response.isSuccessful && response.body() != null){
+                    Log.i("TAG", "onSuccessful")
+                    val dataResponseBody = response.body()
+                    progressBar.visibility = View.INVISIBLE
+
+                    totalConfirmedTextView.text = dataResponseBody?.data?.summary?.total_cases.toString()
+                    newConfirmedTextView.text = dataResponseBody?.data?.change?.total_cases.toString()
+                    totalDeathTextView.text = dataResponseBody?.data?.summary?.deaths.toString()
+                    newDeathTextView.text = dataResponseBody?.data?.change?.deaths.toString()
+                    totalRecoveredTextView.text = dataResponseBody?.data?.summary?.recovered.toString()
+                    newRecoveredTextView.text = dataResponseBody?.data?.change?.recovered.toString()
+
+                }
+            }
+
+            override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
+                Log.i("TAG", "onFailure")
+            }
+        })
+
     }
 
 
