@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.covid_19app.R
+import com.example.covid_19app.adapters.NewsAdapter
+import com.example.covid_19app.models.CovidNewsModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,10 +22,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [NewsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NewsFragment : Fragment() {
+class NewsFragment : Fragment(), NewsAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +45,19 @@ class NewsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_news, container, false)
+        recyclerView = rootView.findViewById(R.id.newsRecyclerView)
+        val news = ArrayList<CovidNewsModel>()
+        adapter = NewsAdapter( news,this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.setHasFixedSize(true)
 
         return rootView
+    }
+
+    override fun onItemClick(position: Int) {
+        Toast.makeText(activity, "you click to $position ", Toast.LENGTH_SHORT).show()
+        adapter.notifyItemChanged(position)
     }
 
     companion object {

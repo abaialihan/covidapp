@@ -1,16 +1,20 @@
 package com.example.covid_19app.models
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class CovidNewsModel(
 
-	@field:SerializedName("totalResults")
+	@SerializedName("totalResults")
+	@Expose
 	val totalResults: Int,
 
-	@field:SerializedName("articles")
+	@SerializedName("articles")
+	@Expose
 	val articles: List<ArticlesItem>,
 
-	@field:SerializedName("status")
+	@SerializedName("status")
+	@Expose
 	val status: String
 )
 
