@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.covid_19app.R
-import com.example.covid_19app.data.dataPOJO.CovidResponse
-import com.example.covid_19app.data.internet.HttpBuilder
+import com.example.covid_19app.data.dataPOJO.CovidStatModel
+import com.example.covid_19app.data.CovidStatHttpBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,6 +67,7 @@ class StaticFragment : Fragment() {
         newRecoveredTextView = rootView.findViewById(R.id.newRecoveredTextView)
 
         itemSelect()
+
         return rootView
     }
 
@@ -83,7 +84,6 @@ class StaticFragment : Fragment() {
         // ItemSelectedListener для спинера
         spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -96,15 +96,15 @@ class StaticFragment : Fragment() {
                 progressBar.visibility = View.VISIBLE
 
                 getResponse(countryName)
-
             }
         }
     }
 
     fun getResponse(countryNameSelect: String){
 
-        HttpBuilder.getService().getStatByCountry(countryNameSelect).enqueue(object : Callback<CovidResponse>{
-            override fun onResponse(call: Call<CovidResponse>, response: Response<CovidResponse>) {
+        CovidStatHttpBuilder.getService().getStatByCountry(countryNameSelect).enqueue(object : Callback<CovidStatModel>{
+            override fun onResponse(call: Call<CovidStatModel>, response: Response<CovidStatModel>) {
+
                 if (response.isSuccessful && response.body() != null){
                     Log.i("TAG", "onSuccessful")
                     val dataResponseBody = response.body()
@@ -116,17 +116,14 @@ class StaticFragment : Fragment() {
                     newDeathTextView.text = dataResponseBody?.data?.change?.deaths.toString()
                     totalRecoveredTextView.text = dataResponseBody?.data?.summary?.recovered.toString()
                     newRecoveredTextView.text = dataResponseBody?.data?.change?.recovered.toString()
-
                 }
             }
 
-            override fun onFailure(call: Call<CovidResponse>, t: Throwable) {
+            override fun onFailure(call: Call<CovidStatModel>, t: Throwable) {
                 Log.i("TAG", "onFailure")
             }
         })
-
     }
-
 
     companion object {
         /**

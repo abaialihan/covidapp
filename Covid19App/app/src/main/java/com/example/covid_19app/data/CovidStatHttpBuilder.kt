@@ -1,25 +1,23 @@
-package com.example.covid_19app.data.internet
+package com.example.covid_19app.data
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
-object HttpBuilder {
+object CovidStatHttpBuilder {
 
     private const val BASE_URL = "https://coronavirus-map.p.rapidapi.com/v1/"
-    private const val BASE_URL1 = "https://coronavirus-19-api.herokuapp.com/"
 
-    private var service: RetrofitService? = null
+    private var service: CovidStatRetrofitService? = null
 
-    private fun buildService(): RetrofitService {
+    private fun buildService(): CovidStatRetrofitService {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(RetrofitService::class.java)
+            .create(CovidStatRetrofitService::class.java)
     }
 
-    public fun getService(): RetrofitService {
+    fun getService(): CovidStatRetrofitService {
         if (service == null) service = buildService()
         return service!!
     }

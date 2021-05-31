@@ -3,7 +3,7 @@ package com.example.covid_19app.data.dataPOJO
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class CovidResponse(
+data class CovidStatModel(
 	@SerializedName("data")
 	@Expose
 	val data: Data,
