@@ -22,11 +22,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [NewsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NewsFragment : Fragment(), NewsAdapter.OnItemClickListener {
+class NewsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NewsAdapter
@@ -46,18 +45,15 @@ class NewsFragment : Fragment(), NewsAdapter.OnItemClickListener {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_news, container, false)
         recyclerView = rootView.findViewById(R.id.newsRecyclerView)
+
         val news = ArrayList<CovidNewsModel>()
-        adapter = NewsAdapter( news,this)
+
+        adapter = NewsAdapter(news)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.setHasFixedSize(true)
 
         return rootView
-    }
-
-    override fun onItemClick(position: Int) {
-        Toast.makeText(activity, "you click to $position ", Toast.LENGTH_SHORT).show()
-        adapter.notifyItemChanged(position)
     }
 
     companion object {
